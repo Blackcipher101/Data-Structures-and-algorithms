@@ -1,65 +1,87 @@
- 
-class Node: 
- 
-	def __init__(self, data): 
-		self.data = data  
-		self.next = None 
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        self.prev = None
 
 
-
-class LinkedList:
-    def __init__(self): 
+class DoublyLinkedList:
+    def __init__(self):
         self.head = None
-    def printList(self):
-        temp = self.head 
-        while (temp): 
-            print (temp.data) 
-            temp = temp.next
+    def push(self, new_data):
+        new_node = Node(new_data)
+        if self.head is None:
+            self.head = new_node
+            return
+        new_node.next = self.head
+        if self.head is not None:
+            self.head.prev = new_node
+            self.head = new_node
+    def insertAfter(self, prev_node, new_data):
+        if prev_node is None:
+            print ("the given previous node cannot be NULL")
+            return
+        new_node = Node(new_data)
+        new_node.next = prev_node.next
+        prev_node.next = new_node
+        new_node.prev = prev_node
+        if new_node.next:
+            new_node.next.prev = new_node
+    def append(self, new_data):
+        new_node = Node(new_data)
+        if self.head is None:
+            self.head = new_node
+            return
+        last = self.head
+        while True:
+            if last.next == None:
+                last.next=new_node
+                new_node.prev=last
+                return
+            last = last.next
+    def printList(self, node):
+        print ("\nTraversal in forward direction")
+        while node:
+            print ((node.data))
+            node = node.next
+    def delete_node(self, node,ele):
+        while node:
+            if ele==node.data:
+                node.prev.next = node.next
+                node.next.prev = node.prev
+            node = node.next
 
 
- 
-llist = LinkedList() 
+llist = DoublyLinkedList()
 
-llist.head = Node("Goa") 
-second = Node("Paris") 
-third = Node("Spain")
-fourth = Node("Iceland")
+llist.append("Goa")
+llist.printList(llist.head)
 
-fifth = Node("Greece") 
-sixth = Node("Ibiza")  
-seventh = Node("Ghana") 
-eighth = Node("Egypt") 
+llist.push("Paris")
 
-llist.head.next = second
-second.next = third
-third.next = fourth
-fourth.next = fifth
-fifth.next = sixth
-sixth.next = seventh
-seventh.next = eighth
-llist.printList()
-newNode = input("new place")
+llist.push("Ghana")
 
-ninth=Node(newNode)
 
-eighth.next = ninth
+llist.append("Ibiza")
 
-print("\n\n\n #################################### \n\n\n")
+print ("Created DLL is:Before Adding ")
+llist.printList(llist.head)
+llist.insertAfter(llist.head.next, "Kerela")
+print ("Created DLL is: After adding")
+llist.printList(llist.head)
 
-llist.printList()
+llist.delete_node(llist.head,"Kerela")
+print ("Created DLL is: after deleting")
+llist.printList(llist.head)
 
-fifth.next=seventh  #removing sixth Ibiza
+llist.head.data ="London"
+llist.printList(llist.head)
 
-print("\n\n\n #################################### \n\n\n")
 
-llist.printList()
-eighth.next = third.next
-second.next = eighth
-seventh.next = third
-third.next = None
-print("\n\n\n #################################### \n\n\n")
 
-llist.printList()
+
+
 
 
 
